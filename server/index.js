@@ -20,42 +20,35 @@ config();
 const PORT = process.env.PORT || 5000;
 const numCPUs = os.cpus().length;
 
-if (cluster.isPrimary) {
-  console.log("Master process running:", process.pid);
+const app = express();
 
-  for (let i = 0; i < numCPUs; i++) {
-    cluster.fork();
-  }
+app.use(cors({ 
+  origin: process.env.FRONTEND_URL || "http://localhost:5173", 
+  credentials: true 
+}));
 
-  cluster.on("exit", (worker) => {
-    console.log("Worker died:", worker.process.pid);
-    cluster.fork();
-  });
-} else {
-  const app = express();
+app.use(compression());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
+app.use(morgan("dev"));
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-  app.use(cors({ 
-    origin: process.env.FRONTEND_URL || "http://localhost:5173", 
-    credentials: true 
-  }));
+app.get("/", (req, res) => {
+  res.send("QuotePost API is running...");
+});
 
-  app.use(compression());
-  app.use(express.json());
-  app.use(express.urlencoded({ extended: true }));
-  app.use(cookieParser());
-  app.use(morgan("dev"));
-  app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+app.use("/api/users", userRoutes);
+app.use("/api/quotes", quoteRoutes);
 
-  app.get("/", (req, res) => {
-    res.send("QuotePost API is running...");
-  });
+// Database connection
+Db();
 
-  app.use("/api/users", userRoutes);
-  app.use("/api/quotes", quoteRoutes);
-
-  Db().then(() => {
-    app.listen(PORT, () =>
-      console.log("🚀 Server running at http://localhost:" + PORT),
-    );
-  });
+// For local development
+if (process.env.NODE_ENV !== "production") {
+  app.listen(PORT, () =>
+    console.log("🚀 Server running at http://localhost:" + PORT),
+  );
 }
+
+export default app;
