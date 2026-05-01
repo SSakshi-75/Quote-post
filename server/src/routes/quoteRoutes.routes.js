@@ -1,6 +1,6 @@
 import express from "express"
 import { authMiddleware } from "../middleware/authMiddleware.js"
-import { createQuote, deleteQuote, getAllQuotes, getQuoteById, toggleLike, updateQuote } from "../controller/QuoteController.controller.js"
+import { createQuote, deleteQuote, getAllQuotes, getQuoteById, toggleLike, updateQuote } from "../controller/quoteController.controller.js"
 export const quoteRoutes = express.Router()
 quoteRoutes.post("/create", authMiddleware, createQuote)
 quoteRoutes.get("/", getAllQuotes)

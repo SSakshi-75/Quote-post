@@ -1,9 +1,18 @@
 import multer from "multer";
 import path from "path";
+import fs from "fs";
+
+// Determine destination (Vercel has read-only filesystem except for /tmp)
+const destination = process.env.NODE_ENV === "production" ? "/tmp" : "uploads/";
+
+// Ensure the local uploads directory exists in development
+if (process.env.NODE_ENV !== "production" && !fs.existsSync("uploads/")) {
+  fs.mkdirSync("uploads/");
+}
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "uploads/");
+    cb(null, destination);
   },
   filename: function (req, file, cb) {
     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
