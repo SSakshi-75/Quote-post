@@ -28,6 +28,16 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(morgan("dev"));
+// Database connection middleware
+app.use(async (req, res, next) => {
+  try {
+    await Db();
+    next();
+  } catch (error) {
+    res.status(500).json({ message: "Database connection failed", error });
+  }
+});
+
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 app.get("/api", (req, res) => {
@@ -42,8 +52,8 @@ app.use("/api/*", (req, res) => {
   res.status(404).json({ message: `API route not found: ${req.originalUrl}` });
 });
 
-// Database connection
-Db();
+// The Db connection is now handled by the middleware above
+// Db();
 
 const PORT = process.env.PORT || 5000;
 
