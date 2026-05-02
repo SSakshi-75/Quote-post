@@ -1,5 +1,14 @@
 import { config } from "dotenv";
-config();
+import path from "path";
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Try to load .env from current directory or parent directory
+config({ path: path.resolve(__dirname, ".env") });
+config({ path: path.resolve(__dirname, "../.env") });
+
 import express from "express";
 import compression from "compression";
 import cookieParser from "cookie-parser";
