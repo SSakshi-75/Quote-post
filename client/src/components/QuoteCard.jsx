@@ -51,7 +51,7 @@ export default function QuoteCard({ quote, onLike, onDelete, onEdit, currentUser
               className="flex items-center gap-1.5 bg-rose-500/5 hover:bg-rose-500 text-rose-500 hover:text-white px-3.5 py-1.5 rounded-full transition-all border border-rose-500/10 font-black text-xs"
             >
               <span className="scale-90">❤️</span>
-              <span>{quote.likes.length}</span>
+              <span>{quote.likes?.length || 0}</span>
             </button>
           </div>
         </div>

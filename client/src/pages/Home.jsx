@@ -23,7 +23,7 @@ export default function Home() {
   const loadQuotes = async () => {
     try {
       const data = await getQuotesAPI();
-      setQuotes(data.quotes);
+      setQuotes(data.quotes || []);
     } catch (error) {
       console.error("Error loading quotes", error);
     } finally {
@@ -35,9 +35,9 @@ export default function Home() {
     loadQuotes();
   }, []);
 
-  const filteredQuotes = quotes.filter((q) => {
-    const matchesSearch = q.text.toLowerCase().includes(search.toLowerCase()) || 
-                          q.author.toLowerCase().includes(search.toLowerCase());
+  const filteredQuotes = (quotes || []).filter((q) => {
+    const matchesSearch = (q.text?.toLowerCase() || "").includes(search.toLowerCase()) || 
+                          (q.author?.toLowerCase() || "").includes(search.toLowerCase());
     
     if (filter === "likes") {
        return matchesSearch && user && q.likes?.includes(user.id);
@@ -234,11 +234,11 @@ export default function Home() {
             
             <div className="grid grid-cols-2 gap-3 max-w-[280px] mx-auto">
               <div className="p-3 bg-gray-50 dark:bg-white/5 rounded-xl border border-black/5 dark:border-white/5">
-                <div className="text-xl font-black text-rose-500">{quotes.filter(q => q.createdBy === user.id).length}</div>
+                <div className="text-xl font-black text-rose-500">{(quotes || []).filter(q => q.createdBy === user.id).length}</div>
                 <div className="text-[8px] uppercase tracking-widest text-gray-500 font-bold">Posts</div>
               </div>
               <div className="p-3 bg-gray-50 dark:bg-white/5 rounded-xl border border-black/5 dark:border-white/5">
-                <div className="text-xl font-black text-rose-500">{quotes.filter(q => q.likes?.includes(user.id)).length}</div>
+                <div className="text-xl font-black text-rose-500">{(quotes || []).filter(q => q.likes?.includes(user.id)).length}</div>
                 <div className="text-[8px] uppercase tracking-widest text-gray-500 font-bold">Liked</div>
               </div>
             </div>

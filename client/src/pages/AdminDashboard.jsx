@@ -24,8 +24,8 @@ export default function AdminDashboard() {
       const quotesData = await getQuotesAPI();
       const usersData = await getAllUsersAPI();
       setStats({ 
-        users: usersData.users, 
-        quotes: quotesData.quotes
+        users: usersData.users || [], 
+        quotes: quotesData.quotes || []
       });
     } catch (error) {
       console.error("Error fetching admin stats", error);
@@ -66,15 +66,15 @@ export default function AdminDashboard() {
   }, []);
 
   // Calculate some analytics
-  const topContributors = stats.users
+  const topContributors = (stats.users || [])
     .map(u => ({
       ...u,
-      quoteCount: stats.quotes.filter(q => q.createdBy === u._id).length
+      quoteCount: (stats.quotes || []).filter(q => q.createdBy === u._id).length
     }))
     .sort((a, b) => b.quoteCount - a.quoteCount)
     .slice(0, 4);
 
-  const totalLikes = stats.quotes.reduce((acc, curr) => acc + (curr.likes?.length || 0), 0);
+  const totalLikes = (stats.quotes || []).reduce((acc, curr) => acc + (curr.likes?.length || 0), 0);
   const avgEngagement = stats.quotes.length > 0 ? (totalLikes / stats.quotes.length).toFixed(1) : 0;
 
   if (!user || user.role !== "admin") {
@@ -184,7 +184,7 @@ export default function AdminDashboard() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-black/5 dark:divide-white/5">
-                  {stats.users.map((u) => (
+                  {(stats.users || []).map((u) => (
                     <tr key={u._id} className="group hover:bg-gray-50 dark:hover:bg-white/[0.01] transition-colors">
                       <td className="px-8 py-6">
                         <div className="flex items-center gap-4">
@@ -297,7 +297,7 @@ export default function AdminDashboard() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-black/5 dark:divide-white/5">
-                {[...stats.quotes]
+                {[...(stats.quotes || [])]
                   .sort((a, b) => quoteSort === "likes" ? (b.likes?.length || 0) - (a.likes?.length || 0) : 0)
                   .slice(0, 8)
                   .map((q) => (
