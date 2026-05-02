@@ -17,9 +17,10 @@ const __dirname = path.dirname(__filename);
 const app = express();
 
 app.use(cors({ 
-  origin: process.env.FRONTEND_URL || true, 
+  origin: true, 
   credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"]
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"]
 }));
 
 app.use(compression());
