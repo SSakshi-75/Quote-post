@@ -3,11 +3,11 @@ config();
 import express from "express";
 import compression from "compression";
 import cookieParser from "cookie-parser";
-import Db from "../server/src/database/Db.js";
+import Db from "./src/database/Db.js";
 import cors from "cors";
 import morgan from "morgan";
-import { userRoutes } from "../server/src/routes/userRoutes.routes.js";
-import { quoteRoutes } from "../server/src/routes/quoteRoutes.routes.js";
+import { userRoutes } from "./src/routes/userRoutes.routes.js";
+import { quoteRoutes } from "./src/routes/quoteRoutes.routes.js";
 import path from "path";
 import { fileURLToPath } from 'url';
 
