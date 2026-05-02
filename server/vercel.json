@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "functions": {
+    "index.js": {
+      "runtime": "vercel-node@latest",
+      "includeFiles": "public/**"
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "index.js"
+    }
+  ]
+}

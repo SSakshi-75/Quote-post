@@ -51,13 +51,18 @@ app.get("/api", (req, res) => {
 app.use("/api/users", userRoutes);
 app.use("/api/quotes", quoteRoutes);
 
-// 404 for API routes
+// Serve static files from the React app
+app.use(express.static(path.join(__dirname, "public")));
+
+// API route 404 handler
 app.use("/api/*", (req, res) => {
   res.status(404).json({ message: `API route not found: ${req.originalUrl}` });
 });
 
-// The Db connection is now handled by the middleware above
-// Db();
+// All other routes should serve the React app
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "index.html"));
+});
 
 const PORT = process.env.PORT || 5000;
 
