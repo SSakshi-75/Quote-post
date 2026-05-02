@@ -6,7 +6,7 @@
     "node": ">=18"
   },
   "scripts": {
-    "build": "cd client && npm install && npm run build"
+    "build": "cd client && npm install && npm run build && cp -r dist/* ../public/"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",
