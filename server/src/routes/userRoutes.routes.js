@@ -35,12 +35,14 @@ userRoutes.get("/test-db", async (req, res) => {
     const state = mongoose.connection.readyState;
     const states = ["disconnected", "connected", "connecting", "disconnecting"];
     
+    const url = process.env.MONGO_DB_URL || "";
     res.json({
       connectionState: states[state],
-      urlConfigured: !!process.env.MONGO_DB_URL,
-      urlStartsCorrectly: process.env.MONGO_DB_URL?.startsWith("mongodb+srv://"),
-      fullUrlLength: process.env.MONGO_DB_URL?.length,
-      maskedUrl: process.env.MONGO_DB_URL?.replace(/\/\/([^:]+):([^@]+)@/, "//****:****@"),
+      urlConfigured: !!url,
+      urlStartsCorrectly: url.startsWith("mongodb+srv://"),
+      fullUrlLength: url.length,
+      urlPreview: url.substring(0, 20) + "..." + url.substring(url.length - 15),
+      maskedUrl: url.replace(/\/\/([^:]+):([^@]+)@/, "//****:****@"),
       error: null
     });
   } catch (err) {
