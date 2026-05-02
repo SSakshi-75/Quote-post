@@ -38,7 +38,9 @@ userRoutes.get("/test-db", async (req, res) => {
     res.json({
       connectionState: states[state],
       urlConfigured: !!process.env.MONGO_DB_URL,
-      maskedUrl: process.env.MONGO_DB_URL?.replace(/:([^@]+)@/, ":****@"),
+      urlStartsCorrectly: process.env.MONGO_DB_URL?.startsWith("mongodb+srv://"),
+      fullUrlLength: process.env.MONGO_DB_URL?.length,
+      maskedUrl: process.env.MONGO_DB_URL?.replace(/\/\/([^:]+):([^@]+)@/, "//****:****@"),
       error: null
     });
   } catch (err) {
