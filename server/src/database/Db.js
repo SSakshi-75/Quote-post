@@ -6,7 +6,9 @@ const Db = async () => {
       console.warn("⚠️ MONGO_DB_URL is not defined in environment variables");
       return;
     }
-    console.log("⏳ Connecting to Database...");
+    const maskedUrl = process.env.MONGO_DB_URL.replace(/:([^@]+)@/, ":****@");
+    console.log("⏳ Connecting to Database with URL:", maskedUrl);
+    
     const conn = await mongoose.connect(process.env.MONGO_DB_URL, {
       serverSelectionTimeoutMS: 5000, // Timeout after 5s
       socketTimeoutMS: 45000, // Close sockets after 45s of inactivity
