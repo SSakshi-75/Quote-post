@@ -17,12 +17,6 @@ import cors from "cors";
 import morgan from "morgan";
 import { userRoutes } from "./src/routes/userRoutes.routes.js";
 import { quoteRoutes } from "./src/routes/quoteRoutes.routes.js";
-import path from "path";
-import { fileURLToPath } from 'url';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
 const app = express();
 
 app.use(cors({ 
