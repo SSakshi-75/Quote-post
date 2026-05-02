@@ -23,7 +23,7 @@
       "destination": "api/index.js"
     },
     {
-      "source": "/((?!api/).*)",
+      "source": "/(.*)",
       "destination": "/client/$1"
     }
   ]
