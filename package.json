@@ -1,12 +1,10 @@
 {
-  "name": "quote-post-monorepo",
-  "private": true,
+  "name": "quote-post",
+  "version": "1.0.0",
   "type": "module",
-  "engines": {
-    "node": ">=18"
-  },
   "scripts": {
-    "build": "cd client && npm install && npm run build && mkdir -p ../public && cp -r dist/* ../public/"
+    "start": "node api/index.js",
+    "dev": "nodemon api/index.js"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",
