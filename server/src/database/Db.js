@@ -9,14 +9,15 @@ const Db = async () => {
     const maskedUrl = process.env.MONGO_DB_URL.replace(/:([^@]+)@/, ":****@");
     console.log("⏳ Connecting to Database with URL:", maskedUrl);
     
+    if (mongoose.connection.readyState >= 1) return;
+
     const conn = await mongoose.connect(process.env.MONGO_DB_URL, {
-      serverSelectionTimeoutMS: 5000, // Timeout after 5s
-      socketTimeoutMS: 45000, // Close sockets after 45s of inactivity
+      serverSelectionTimeoutMS: 10000,
+      connectTimeoutMS: 10000,
     });
-    console.log("📡 Database Connected Successfully!");
+    console.log("📡 Connected to MongoDB Atlas");
   } catch (err) {
-    console.error("❌ Database Connection Error Details:", err);
-    // Don't exit, just let it fail so we can see the logs
+    console.error("❌ DB Error:", err.message);
   }
 };
 
