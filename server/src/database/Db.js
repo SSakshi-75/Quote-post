@@ -10,7 +10,10 @@ const Db = async () => {
     });
     console.log("📡 Connected to MongoDB Atlas");
   } catch (err) {
-    console.error("❌ DB Connection Error");
+    console.error("❌ DB Connection Error Details:");
+    console.error("Error Name:", err.name);
+    console.error("Error Message:", err.message);
+    if (err.reason) console.error("Reason:", err.reason);
   }
 };
 
