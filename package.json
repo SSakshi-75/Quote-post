@@ -1,10 +1,10 @@
 {
   "name": "quote-post-monorepo",
   "private": true,
+  "type": "module",
   "engines": {
     "node": ">=18"
   },
-  "type": "module",
   "scripts": {
     "build": "cd client && npm install && npm run build"
   },
