@@ -50,6 +50,11 @@ export const loginUser = async (req, res) => {
     if (!isMatch) {
       return res.status(400).json({ message: "Invalid email or password" });
     }
+    if (!process.env.JWT_SECRET) {
+      console.error("JWT_SECRET is not defined in environment variables");
+      return res.status(500).json({ message: "Server configuration error: JWT_SECRET missing" });
+    }
+
     const token = jwt.sign(
       { id: userExist._id },
       process.env.JWT_SECRET,
