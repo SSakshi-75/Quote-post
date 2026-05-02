@@ -30,12 +30,17 @@ app.use(cookieParser());
 app.use(morgan("dev"));
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-app.get("/", (req, res) => {
+app.get("/api", (req, res) => {
   res.json({ message: "QuotePost API is running..." });
 });
 
 app.use("/api/users", userRoutes);
 app.use("/api/quotes", quoteRoutes);
+
+// 404 for API routes
+app.use("/api/*", (req, res) => {
+  res.status(404).json({ message: `API route not found: ${req.originalUrl}` });
+});
 
 // Database connection
 Db();
