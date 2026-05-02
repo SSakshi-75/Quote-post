@@ -27,3 +27,24 @@ userRoutes.get("/test", authMiddleware, async (req, res) => {
     user: test,
   });
 });
+
+// ✅ DATABASE DIAGNOSTIC ROUTE
+userRoutes.get("/test-db", async (req, res) => {
+  try {
+    const mongoose = (await import("mongoose")).default;
+    const state = mongoose.connection.readyState;
+    const states = ["disconnected", "connected", "connecting", "disconnecting"];
+    
+    res.json({
+      connectionState: states[state],
+      urlConfigured: !!process.env.MONGO_DB_URL,
+      maskedUrl: process.env.MONGO_DB_URL?.replace(/:([^@]+)@/, ":****@"),
+      error: null
+    });
+  } catch (err) {
+    res.status(500).json({
+      error: err.message,
+      stack: err.stack
+    });
+  }
+});
