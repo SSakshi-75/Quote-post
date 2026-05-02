@@ -41,8 +41,9 @@ app.use(async (req, res, next) => {
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 app.get("/api", (req, res) => {
-  res.json({ message: "QuotePost API is running..." });
+  res.json({ message: "QuotePost API is running (v2)..." });
 });
+
 
 app.use("/api/users", userRoutes);
 app.use("/api/quotes", quoteRoutes);
