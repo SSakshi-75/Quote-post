@@ -11,10 +11,10 @@ const Db = async () => {
       serverSelectionTimeoutMS: 5000, // Timeout after 5s
       socketTimeoutMS: 45000, // Close sockets after 45s of inactivity
     });
-    console.log("📡 Database Connected:", conn.connection.host);
+    console.log("📡 Database Connected Successfully!");
   } catch (err) {
-    console.error("❌ Database Connection Error:", err);
-    process.exit(1); // Exit if DB connection fails in production
+    console.error("❌ Database Connection Error Details:", err);
+    // Don't exit, just let it fail so we can see the logs
   }
 };
 
