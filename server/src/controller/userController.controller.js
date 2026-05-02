@@ -29,6 +29,7 @@ export const registerUser = async (req, res) => {
       user: { id: user._id, email: user.email },
     });
   } catch (error) {
+    console.error("Registration Error:", error);
     return res.status(500).json({ message: error.message, error });
   }
 };
@@ -49,7 +50,7 @@ export const loginUser = async (req, res) => {
     if (!isMatch) {
       return res.status(400).json({ message: "Invalid email or password" });
     }
-    const token = await jwt.sign(
+    const token = jwt.sign(
       { id: userExist._id },
       process.env.JWT_SECRET,
       { expiresIn: "7d" }
@@ -74,6 +75,7 @@ export const loginUser = async (req, res) => {
         token,
       });
   } catch (error) {
+    console.error("Login Error:", error);
     return res.status(500).json({ message: error.message, error });
   }
 };
