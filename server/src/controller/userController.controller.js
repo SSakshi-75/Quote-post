@@ -106,7 +106,8 @@ export const updateProfile = async (req, res) => {
     if (!req.file) {
       return res.status(400).json({ message: "No file uploaded" });
     }
-    const profilePic = `${req.protocol}://${req.get("host")}/uploads/${req.file.filename}`;
+    const protocol = req.get("x-forwarded-proto") || req.protocol;
+    const profilePic = `${protocol}://${req.get("host")}/uploads/${req.file.filename}`;
     const user = await User.findByIdAndUpdate(req.user._id, { profilePic }, { new: true });
     return res.status(200).json({ 
       message: "Profile Updated", 
