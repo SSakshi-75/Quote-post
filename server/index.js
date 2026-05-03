@@ -22,23 +22,32 @@ Db();
 const app = express();
 
 app.use(cors({
-
-  origin: ["https://quote-post-hfrg.vercel.app", "https://quote-post-75.vercel.app"],
+  origin: [
+    "https://quote-post-hfrg.vercel.app", 
+    "https://quote-post-75.vercel.app",
+    "https://quote-post-c6lj.vercel.app"
+  ],
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"]
 }));
+
 
 app.use(compression());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(morgan("dev"));
-// Check if MongoDB URL is provided
-if (!process.env.MONGO_DB_URL) {
-  console.error("CRITICAL: MONGO_DB_URL is not defined in environment variables!");
-}
-
+// Database connection middleware
+app.use(async (req, res, next) => {
+  try {
+    await Db();
+    next();
+  } catch (error) {
+    console.error("DB Middleware Error:", error);
+    res.status(500).json({ message: "Database connection failed", error: error.message });
+  }
+});
 
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
