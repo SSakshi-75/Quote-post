@@ -22,15 +22,26 @@ Db();
 const app = express();
 
 app.use(cors({
-  origin: [
-    "https://quote-post-hfrg.vercel.app", 
-    "https://quote-post-75.vercel.app",
-    "https://quote-post-c6lj.vercel.app"
-  ],
+  origin: function (origin, callback) {
+    const allowedOrigins = [
+      "https://quote-post-hfrg.vercel.app",
+      "https://quote-post-75.vercel.app",
+      "https://quote-post-c6lj.vercel.app",
+      "https://quote-post.vercel.app",
+      "http://localhost:5173",
+      "http://localhost:3000"
+    ];
+    if (!origin || allowedOrigins.includes(origin) || origin.endsWith(".vercel.app")) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"]
 }));
+
 
 
 app.use(compression());
