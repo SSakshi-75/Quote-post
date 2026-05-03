@@ -1,14 +1,6 @@
 import { config } from "dotenv";
 import path from "path";
 import { fileURLToPath } from 'url';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-// Try to load .env from current directory or parent directory
-config({ path: path.resolve(__dirname, ".env") });
-config({ path: path.resolve(__dirname, "../.env") });
-
 import express from "express";
 import compression from "compression";
 import cookieParser from "cookie-parser";
@@ -17,10 +9,21 @@ import cors from "cors";
 import morgan from "morgan";
 import { userRoutes } from "./src/routes/userRoutes.routes.js";
 import { quoteRoutes } from "./src/routes/quoteRoutes.routes.js";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Load environment variables
+config();
+
+// Connect to Database
+Db();
+
 const app = express();
 
-app.use(cors({ 
-  origin: true, 
+app.use(cors({
+
+  origin: ["https://quote-post-hfrg.vercel.app", "https://quote-post-75.vercel.app"],
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"]
@@ -31,15 +34,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(morgan("dev"));
-// Database connection middleware
-app.use(async (req, res, next) => {
-  try {
-    await Db();
-    next();
-  } catch (error) {
-    res.status(500).json({ message: "Database connection failed", error });
-  }
-});
+// Check if MongoDB URL is provided
+if (!process.env.MONGO_DB_URL) {
+  console.error("CRITICAL: MONGO_DB_URL is not defined in environment variables!");
+}
+
 
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
