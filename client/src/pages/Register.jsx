@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Eye, EyeOff } from "lucide-react";
 import { registerAPI } from "../services/api";
 import { useNavigate, Link } from "react-router-dom";
 import toast from "react-hot-toast";
@@ -7,6 +8,7 @@ export default function Register() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
   const handleRegister = async (e) => {
@@ -46,12 +48,13 @@ export default function Register() {
               required
             />
           </div>
-          <div className="mb-6">
+          <div className="mb-6 relative">
             <label className="block text-gray-500 dark:text-gray-400 mb-2">Password</label>
             <input
-              type="password"
+              type={showPassword ? "text" : "password"}
               className="w-full p-3 bg-gray-100 dark:bg-gray-800 rounded-lg border border-black/5 dark:border-gray-700 focus:border-rose-500 outline-none transition-all text-black dark:text-white"
               placeholder="Enter password"
+              value={password}
               onChange={(e) => setPassword(e.target.value)}
               minLength={8}
               maxLength={64}
@@ -59,6 +62,13 @@ export default function Register() {
               title="Password must contain at least one uppercase, one lowercase, one number and one special character"
               required
             />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-[42px] text-gray-500 hover:text-rose-500 transition-colors"
+            >
+              {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+            </button>
           </div>
           <button className="w-full bg-rose-600 hover:bg-rose-700 text-white font-bold py-3 rounded-lg transition-all transform active:scale-95 shadow-lg shadow-rose-900/20">
             Register
