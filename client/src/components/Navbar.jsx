@@ -165,7 +165,16 @@ export default function Navbar({ theme, toggleTheme }) {
               <label htmlFor="profile-upload" className="cursor-pointer block">
                 <div className="w-8 h-8 md:w-10 md:h-10 rounded-full border border-black/5 dark:border-white/10 overflow-hidden group-hover:border-rose-500 transition-all">
                   {user.profilePic ? (
-                    <img src={user.profilePic} alt="Profile" className="w-full h-full object-cover" />
+                    <img 
+                      src={user.profilePic.startsWith("http://localhost:5000") 
+                        ? user.profilePic.replace("http://localhost:5000", import.meta.env.VITE_API_URL.replace("/api", ""))
+                        : user.profilePic.startsWith("/") 
+                          ? `${import.meta.env.VITE_API_URL.replace("/api", "")}${user.profilePic}`
+                          : user.profilePic
+                      } 
+                      alt="Profile" 
+                      className="w-full h-full object-cover" 
+                    />
                   ) : (
                     <div className="w-full h-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-rose-500 font-bold">
                       {user.name?.[0]}

@@ -213,7 +213,16 @@ export default function Home() {
               <label htmlFor="profile-page-upload" className="cursor-pointer block relative">
                 <div className="w-24 h-24 md:w-28 md:h-28 rounded-full border-2 border-rose-500/20 overflow-hidden group-hover:border-rose-500 transition-all shadow-2xl mx-auto">
                   {user.profilePic ? (
-                    <img src={user.profilePic} alt="Profile" className="w-full h-full object-cover" />
+                    <img 
+                      src={user.profilePic.startsWith("http://localhost:5000") 
+                        ? user.profilePic.replace("http://localhost:5000", import.meta.env.VITE_API_URL.replace("/api", ""))
+                        : user.profilePic.startsWith("/") 
+                          ? `${import.meta.env.VITE_API_URL.replace("/api", "")}${user.profilePic}`
+                          : user.profilePic
+                      } 
+                      alt="Profile" 
+                      className="w-full h-full object-cover" 
+                    />
                   ) : (
                     <div className="w-full h-full bg-gray-100 dark:bg-gray-900 flex items-center justify-center text-rose-500 font-black text-3xl">
                       {user.name?.[0]}

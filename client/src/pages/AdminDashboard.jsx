@@ -190,7 +190,16 @@ export default function AdminDashboard() {
                         <div className="flex items-center gap-4">
                           <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-900 overflow-hidden shadow-inner flex items-center justify-center shrink-0">
                             {u.profilePic ? (
-                              <img src={u.profilePic} alt="" className="w-full h-full object-cover" />
+                              <img 
+                                src={u.profilePic.startsWith("http://localhost:5000") 
+                                  ? u.profilePic.replace("http://localhost:5000", import.meta.env.VITE_API_URL.replace("/api", ""))
+                                  : u.profilePic.startsWith("/") 
+                                    ? `${import.meta.env.VITE_API_URL.replace("/api", "")}${u.profilePic}`
+                                    : u.profilePic
+                                } 
+                                alt="" 
+                                className="w-full h-full object-cover" 
+                              />
                             ) : (
                               <span className="text-rose-500 font-black text-xl">{u.name[0]}</span>
                             )}
