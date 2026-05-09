@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { loginAPI } from "../services/api";
 import { useNavigate, Link } from "react-router-dom";
 import toast from "react-hot-toast";
@@ -8,10 +8,12 @@ export default function Login({ isAdminPage }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
+    const handleLogin = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     try {
       const data = await loginAPI({ email, password });
       toast.success(data.message);
@@ -21,9 +23,11 @@ export default function Login({ isAdminPage }) {
       } else {
         navigate("/");
       }
-      window.location.reload(); // Simple way to refresh auth state
+      window.location.reload(); 
     } catch (error) {
       toast.error(error.response?.data?.message || "Login failed");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -75,8 +79,18 @@ export default function Login({ isAdminPage }) {
               Forgot Password?
             </Link>
           </div>
-          <button className="w-full bg-rose-600 hover:bg-rose-700 text-white font-bold py-3 rounded-lg transition-all transform active:scale-95 shadow-lg shadow-rose-900/20">
-            Login
+          <button 
+            disabled={isLoading}
+            className="w-full bg-rose-600 hover:bg-rose-700 disabled:bg-rose-400 text-white font-bold py-3 rounded-lg transition-all transform active:scale-95 shadow-lg shadow-rose-900/20 flex items-center justify-center gap-2"
+          >
+            {isLoading ? (
+              <>
+                <Loader2 className="w-4 h-4 animate-spin" />
+                <span>Processing...</span>
+              </>
+            ) : (
+              "Login"
+            )}
           </button>
         </form>
         {!isAdminPage && (
