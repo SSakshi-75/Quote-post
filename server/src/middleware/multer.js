@@ -3,11 +3,11 @@ import path from "path";
 import fs from "fs";
 
 // Determine destination (Vercel has read-only filesystem except for /tmp)
-const destination = (process.env.NODE_ENV === "production" || process.env.VERCEL) ? "/tmp" : "uploads/";
+const destination = process.env.VERCEL ? "/tmp" : "uploads/";
 
 // Ensure the local uploads directory exists in development
 // Vercel environment has process.env.VERCEL set to "1"
-if (process.env.NODE_ENV !== "production" && !process.env.VERCEL && !fs.existsSync("uploads/")) {
+if (!process.env.VERCEL && !fs.existsSync("uploads/")) {
   try {
     fs.mkdirSync("uploads/");
   } catch (err) {
