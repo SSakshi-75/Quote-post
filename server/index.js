@@ -26,15 +26,13 @@ const app = express();
 app.use(cors({
   origin: function (origin, callback) {
     const allowedOrigins = [
-      "https://quote-post-hfrg.vercel.app",
-      "https://quote-post-75.vercel.app",
-      "https://quote-post-c6lj.vercel.app",
-      "https://quote-post.vercel.app",
       "http://localhost:5173",
       "http://127.0.0.1:5173",
-      "http://localhost:3000"
+      "http://localhost:5001",
+      "http://127.0.0.1:5001",
+      // Add your Render Frontend URL here later
     ];
-    if (!origin || allowedOrigins.includes(origin) || origin.endsWith(".vercel.app")) {
+    if (!origin || allowedOrigins.includes(origin) || origin.endsWith(".render.com") || origin.endsWith(".vercel.app")) {
       callback(null, true);
     } else {
       callback(new Error("Not allowed by CORS"));
