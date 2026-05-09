@@ -30,7 +30,7 @@ app.use(cors({
       "http://127.0.0.1:5173",
       "http://localhost:5001",
       "http://127.0.0.1:5001",
-      // Add your Render Frontend URL here later
+      "https://quote-post.vercel.app",
     ];
     if (!origin || allowedOrigins.includes(origin) || origin.endsWith(".render.com") || origin.endsWith(".vercel.app")) {
       callback(null, true);
