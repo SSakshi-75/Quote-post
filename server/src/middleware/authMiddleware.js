@@ -2,11 +2,11 @@ import jwt from "jsonwebtoken"
 import { User } from "../models/userModel.js";
 export const authMiddleware = async (req, res, next) => {
   try {
-    const { token } = req.cookies;
+    const token = req.cookies?.token || req.headers.authorization?.split(" ")[1];
     if (!token) {
       return res.status(401).json({ message: "No token provided" });
     }
-    const verify =  jwt.verify(token, process.env.JWT_SECRET);
+    const verify = jwt.verify(token, process.env.JWT_SECRET);
     if (!verify) {
       return res.status(401).json({ message: "unauthorized access" });
     }
