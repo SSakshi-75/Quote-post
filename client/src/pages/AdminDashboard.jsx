@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Loader2 } from "lucide-react";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
@@ -79,6 +80,15 @@ export default function AdminDashboard() {
 
   if (!user || user.role !== "admin") {
     return <Login isAdminPage={true} />;
+  }
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[#fdfdfd] dark:bg-[#050505] flex flex-col items-center justify-center gap-4">
+        <Loader2 className="w-12 h-12 text-rose-500 animate-spin" />
+        <p className="text-xs font-black uppercase tracking-[0.3em] text-gray-500 animate-pulse">Initializing Dashboard...</p>
+      </div>
+    );
   }
 
   return (
