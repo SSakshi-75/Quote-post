@@ -26,7 +26,7 @@ export default function Register() {
     <div className="flex items-center justify-center min-h-screen bg-gray-50 dark:bg-black text-black dark:text-white transition-colors duration-300 p-4">
       <div className="bg-white dark:bg-gray-900 p-6 md:p-8 rounded-2xl shadow-xl w-full max-w-sm border border-black/5 dark:border-gray-800">
         <h2 className="text-3xl font-bold mb-6 text-center text-rose-500">Create Account</h2>
-        <form onSubmit={handleRegister}>
+        <form onSubmit={handleRegister} autoComplete="off">
           <div className="mb-4">
             <label className="block text-gray-500 dark:text-gray-400 mb-2">Name</label>
             <input
@@ -42,6 +42,7 @@ export default function Register() {
             <input
               type="email"
               className="w-full p-3 bg-gray-100 dark:bg-gray-800 rounded-lg border border-black/5 dark:border-gray-700 focus:border-rose-500 outline-none transition-all text-black dark:text-white"
+              autoComplete="none"
               placeholder="Enter email"
               value={email}
               onChange={(e) => setEmail(e.target.value.toLowerCase())}
@@ -53,6 +54,7 @@ export default function Register() {
             <input
               type={showPassword ? "text" : "password"}
               className="w-full p-3 bg-gray-100 dark:bg-gray-800 rounded-lg border border-black/5 dark:border-gray-700 focus:border-rose-500 outline-none transition-all text-black dark:text-white"
+              autoComplete="new-password"
               placeholder="Enter password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}

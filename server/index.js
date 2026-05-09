@@ -16,6 +16,8 @@ const __dirname = path.dirname(__filename);
 // Load environment variables
 config();
 
+// Server logic restarted
+
 // Connect to Database
 Db();
 

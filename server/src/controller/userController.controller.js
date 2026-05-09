@@ -1,6 +1,8 @@
 import { User } from "../models/userModel.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import crypto from "crypto";
+import nodemailer from "nodemailer";
 
 // Register
 export const registerUser = async (req, res) => {
@@ -93,6 +95,7 @@ export const logoutUser = async (req, res) => {
       httpOnly: true,
       secure: true,
       sameSite: "none",
+      path: "/",
     });
     return res.status(200).json({ message: "Logout Successfully!!!" });
   } catch (error) {
@@ -149,6 +152,88 @@ export const deleteUser = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
     return res.status(200).json({ message: "User deleted successfully" });
+  } catch (error) {
+    return res.status(500).json({ message: "Server error", error });
+  }
+};
+
+// Forgot Password
+export const forgotPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const user = await User.findOne({ email: email.toLowerCase() });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Generate reset token
+    const resetToken = crypto.randomBytes(20).toString("hex");
+    user.resetPasswordToken = crypto.createHash("sha256").update(resetToken).digest("hex");
+    user.resetPasswordExpire = Date.now() + 30 * 60 * 1000; // 30 minutes
+
+    await user.save();
+
+    // Create reset URL
+    const resetUrl = `${process.env.CLIENT_URL || "http://localhost:5173"}/reset-password/${resetToken}`;
+
+    // Send email (Mock if no SMTP configured)
+    console.log(`Password Reset Link: ${resetUrl}`);
+
+    // If SMTP is not configured, we still return success but log link
+    try {
+      const transporter = nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+          user: process.env.EMAIL_USER,
+          pass: process.env.EMAIL_PASS,
+        },
+      });
+
+      await transporter.sendMail({
+        from: '"QuotePost" <no-reply@quotepost.com>',
+        to: user.email,
+        subject: "Password Reset Request",
+        html: `<h3>Password Reset</h3>
+               <p>You requested a password reset. Please click the link below to reset your password:</p>
+               <a href="${resetUrl}">${resetUrl}</a>
+               <p>This link will expire in 30 minutes.</p>`,
+      });
+    } catch (err) {
+      console.warn("SMTP Email failed to send. Check EMAIL_USER/PASS in .env. Link logged to console.");
+    }
+
+    return res.status(200).json({ message: "Reset link sent to email (and logged to console)" });
+  } catch (error) {
+    return res.status(500).json({ message: "Server error", error });
+  }
+};
+
+// Reset Password
+export const resetPassword = async (req, res) => {
+  try {
+    const { token } = req.params;
+    const { password } = req.body;
+
+    const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
+
+    const user = await User.findOne({
+      resetPasswordToken: hashedToken,
+      resetPasswordExpire: { $gt: Date.now() },
+    });
+
+    if (!user) {
+      return res.status(400).json({ message: "Invalid or expired reset token" });
+    }
+
+    // Set new password
+    user.password = await bcrypt.hash(password, 10);
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpire = undefined;
+
+    await user.save();
+
+    return res.status(200).json({ message: "Password reset successful" });
   } catch (error) {
     return res.status(500).json({ message: "Server error", error });
   }

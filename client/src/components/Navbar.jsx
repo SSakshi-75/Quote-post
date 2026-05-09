@@ -12,13 +12,13 @@ export default function Navbar({ theme, toggleTheme }) {
   const handleLogout = async () => {
     try {
       await logoutAPI();
-      localStorage.removeItem("user");
-      toast.success("Logged out successfully");
-      navigate("/login");
-      window.location.reload();
     } catch (error) {
-      toast.error("Logout failed");
+      console.error("Logout API error:", error);
     }
+    localStorage.removeItem("user");
+    toast.success("Logged out successfully");
+    navigate("/login");
+    window.location.reload();
   };
 
   const handleFileChange = async (e) => {

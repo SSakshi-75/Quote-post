@@ -33,12 +33,13 @@ export default function Login({ isAdminPage }) {
         <h2 className="text-3xl font-bold mb-6 text-center text-rose-500">
           {isAdminPage ? "Admin Portal" : "Welcome Back"}
         </h2>
-        <form onSubmit={handleLogin}>
+        <form onSubmit={handleLogin} autoComplete="off">
           <div className="mb-4">
             <label className="block text-gray-500 dark:text-gray-400 mb-2">Email</label>
             <input
               type="email"
               className="w-full p-3 bg-gray-100 dark:bg-gray-800 rounded-lg border border-black/5 dark:border-gray-700 focus:border-rose-500 outline-none transition-all text-black dark:text-white"
+              autoComplete="none"
               placeholder="Enter email"
               value={email}
               onChange={(e) => setEmail(e.target.value.toLowerCase())}
@@ -50,6 +51,7 @@ export default function Login({ isAdminPage }) {
             <input
               type={showPassword ? "text" : "password"}
               className="w-full p-3 bg-gray-100 dark:bg-gray-800 rounded-lg border border-black/5 dark:border-gray-700 focus:border-rose-500 outline-none transition-all text-black dark:text-white"
+              autoComplete="new-password"
               placeholder="Enter password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -64,6 +66,14 @@ export default function Login({ isAdminPage }) {
             >
               {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
             </button>
+          </div>
+          <div className="flex justify-end mb-6 -mt-4">
+            <Link 
+              to="/forgot-password"
+              className="text-xs text-rose-500 hover:underline font-semibold"
+            >
+              Forgot Password?
+            </Link>
           </div>
           <button className="w-full bg-rose-600 hover:bg-rose-700 text-white font-bold py-3 rounded-lg transition-all transform active:scale-95 shadow-lg shadow-rose-900/20">
             Login
