@@ -5,6 +5,15 @@ const API = axios.create({
   withCredentials: true, 
 });
 
+// Interceptor to add token to headers
+API.interceptors.request.use((config) => {
+  const user = JSON.parse(localStorage.getItem("user"));
+  if (user && user.token) {
+    config.headers.Authorization = `Bearer ${user.token}`;
+  }
+  return config;
+});
+
 // Authentication APIs
 export const registerAPI = async (userData) => {
   const { data } = await API.post("/users/register", userData);

@@ -15,7 +15,7 @@ export default function Login({ isAdminPage }) {
     try {
       const data = await loginAPI({ email, password });
       toast.success(data.message);
-      localStorage.setItem("user", JSON.stringify(data.user));
+      localStorage.setItem("user", JSON.stringify({ ...data.user, token: data.token }));
       if (data.user.role === "admin") {
         navigate("/admin");
       } else {
