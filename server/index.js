@@ -64,6 +64,10 @@ app.use(async (req, res, next) => {
 const uploadsPath = process.env.VERCEL ? "/tmp" : path.join(__dirname, "uploads");
 app.use("/uploads", express.static(uploadsPath));
 
+app.get("/", (req, res) => {
+  res.send("<h1>🚀 QuotePost Backend is Running Successfully!</h1><p>Visit /api for API status.</p>");
+});
+
 app.get("/api", (req, res) => {
   res.json({ message: "QuotePost API is running (v2)..." });
 });
